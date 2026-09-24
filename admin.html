@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin | শ্রমিকের অধিকার</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand">Admin Panel</div><nav><a href="/">সাইট</a></nav></header>
+<main>
+<section id="login" class="card">
+<h2>অ্যাডমিন লগইন</h2>
+<form id="loginForm">
+<input id="user" placeholder="Username" required>
+<input id="pass" type="password" placeholder="Password" required>
+<button>Login</button>
+</form>
+</section>
+
+<section id="panel" class="card" style="display:none">
+<h2>অভিযোগসমূহ</h2>
+<div id="stats"></div>
+<div id="list"></div>
+</section>
+</main>
+<script>
+let token = localStorage.getItem("admin_token");
+
+async function load(){
+  const r = await fetch("/api/admin/complaints",{headers:{Authorization:"Bearer "+token}});
+  if(!r.ok){localStorage.removeItem("admin_token");return showLogin();}
+  const rows = await r.json();
+  document.getElementById("login").style.display="none";
+  document.getElementById("panel").style.display="block";
+  document.getElementById("list").innerHTML = rows.map(x=>`
+    <div class="card">
+      <b>${x.complaint_id}</b>
+      <p>${x.factory} — ${x.complaint_type}</p>
+      <p>${x.details}</p>
+      <p>ফোন: ${x.anonymous ? "গোপন" : x.phone}</p>
+      <select onchange="updateCase('${x.complaint_id}',this.value)">
+        ${["Received","Reviewing","Under Investigation","Resolved","Closed"].map(s=>`<option ${s===x.status?"selected":""}>${s}</option>`).join("")}
+      </select>
+    </div>`).join("");
+  const sr=await fetch("/api/admin/stats",{headers:{Authorization:"Bearer "+token}});
+  const st=await sr.json();
+  document.getElementById("stats").innerHTML=`মোট: ${st.total} | নতুন: ${st.received} | তদন্তাধীন: ${st.investigating} | সমাধান: ${st.resolved}`;
+}
+function showLogin(){document.getElementById("login").style.display="block";document.getElementById("panel").style.display="none";}
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:user.value,password:pass.value})});
+ const d=await r.json(); if(!r.ok)return alert(d.error);
+ localStorage.setItem("admin_token",d.token); load();
+});
+async function updateCase(id,status){
+ await fetch("/api/admin/complaints/"+id,{method:"PATCH",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({status})});
+}
+load();
+</script>
+</body>
+</html>

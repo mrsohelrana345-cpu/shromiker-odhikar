@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>শ্রমিকের অধিকার</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">শ্রমিকের <b>অধিকার</b></div>
+  <nav><a href="#complaint">অভিযোগ</a><a href="#track">ট্র্যাক</a><a href="/admin.html">অ্যাডমিন</a></nav>
+</header>
+
+<section class="hero">
+  <h1>আপনার অভিযোগ, আপনার অধিকার</h1>
+  <p>বেতন বকেয়া, চাকরি থেকে বাদ, ওভারটাইম বা কর্মক্ষেত্রের অন্যায় সম্পর্কে অভিযোগ জমা দিন।</p>
+  <a class="btn" href="#complaint">অভিযোগ করুন</a>
+</section>
+
+<main>
+<section id="complaint" class="card">
+  <h2>অভিযোগ জমা দিন</h2>
+  <form id="form" enctype="multipart/form-data">
+    <label>নাম <input name="name" placeholder="নাম (ঐচ্ছিক)"></label>
+    <label>মোবাইল নম্বর * <input name="phone" required placeholder="01XXXXXXXXX"></label>
+    <label>কারখানার নাম * <input name="factory" required></label>
+    <label>কারখানার ঠিকানা <input name="address"></label>
+    <label>অভিযোগের ধরন *
+      <select name="complaint_type" required>
+        <option value="">নির্বাচন করুন</option>
+        <option>বেতন না পাওয়া</option>
+        <option>অন্যায়ভাবে চাকরি থেকে বাদ</option>
+        <option>ওভারটাইমের টাকা না পাওয়া</option>
+        <option>ছুটির টাকা সংক্রান্ত সমস্যা</option>
+        <option>অন্যান্য</option>
+      </select>
+    </label>
+    <label>বিস্তারিত অভিযোগ * <textarea name="details" required></textarea></label>
+    <label>প্রমাণ (PDF/JPG/PNG, সর্বোচ্চ 5MB)
+      <input type="file" name="evidence" accept=".pdf,.jpg,.jpeg,.png">
+    </label>
+    <label class="check"><input type="checkbox" name="anonymous" value="1"> আমার পরিচয় গোপন রাখুন</label>
+    <button>অভিযোগ জমা দিন</button>
+  </form>
+  <div id="success" class="success"></div>
+</section>
+
+<section id="track" class="card">
+  <h2>অভিযোগের অবস্থা দেখুন</h2>
+  <form id="trackForm">
+    <input id="trackId" placeholder="যেমন SR-2026-A1B2C3" required>
+    <button>খুঁজুন</button>
+  </form>
+  <div id="result"></div>
+</section>
+
+<section class="notice">
+  <b>গোপনীয়তা:</b> অভিযোগের ব্যক্তিগত তথ্য প্রকাশ্যে দেখানো হবে না। বাস্তবে চালু করার আগে privacy policy, consent, নিরাপত্তা ও আইনগত পরামর্শ যুক্ত করুন।
+</section>
+</main>
+
+<footer>© 2026 শ্রমিকের অধিকার</footer>
+<script src="app.js"></script>
+</body>
+</html>
